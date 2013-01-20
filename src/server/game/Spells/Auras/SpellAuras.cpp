@@ -3171,7 +3171,12 @@ void Aura::HandleModFear(bool apply, bool Real)
     if (!Real)
         return;
 
-    //m_target->SetFeared(apply, GetCasterGUID(), GetId());
+    // damage before spell is automaticly removed
+	int32 max_damage = int32(m_target->GetCreateHealth()*0.20f); //Tryout, might nerf it to 15%
+	int32 breakChance=irand(20,100);
+	m_modifier.m_amount = max_damage*((float)breakChance)/100.0f;
+	
+	//m_target->SetFeared(apply, GetCasterGUID(), GetId());
     m_target->SetControlled(apply, UNIT_STAT_FLEEING);
 }
 
@@ -3455,6 +3460,11 @@ void Aura::HandleAuraModRoot(bool apply, bool Real)
     // only at real add/remove aura
     if (!Real)
         return;
+		
+	// damage before spell is automaticly removed
+    int32 max_damage = int32(m_target->GetCreateHealth()*0.15f);
+    int32 breakChance=irand(20,100);
+    m_modifier.m_amount = max_damage*((float)breakChance)/100.0f;
 
     m_target->SetControlled(apply, UNIT_STAT_ROOT);
 }
