@@ -380,7 +380,7 @@ void Pet::SavePetToDB(PetSaveMode mode)
     }
 
     _SaveSpells();
-    _SaveSpellCooldowns();
+    if(getPetType() != SUMMON_PET) _SaveSpellCooldowns();
     _SaveAuras();
 
     switch (mode)
