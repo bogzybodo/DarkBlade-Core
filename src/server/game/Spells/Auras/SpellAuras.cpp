@@ -2920,7 +2920,10 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
         // FG: workaround, fix extreme regeneration bug (orb of deception + polymorph)
         m_target->setTransForm(0);
 
-        Unit::AuraList const& otherTransforms = m_target->GetAurasByType(SPELL_AURA_TRANSFORM);
+        // FG: workaround, fix extreme regeneration bug (orb of deception + polymorph)
+		m_target->setTransForm(0);
+		
+		Unit::AuraList const& otherTransforms = m_target->GetAurasByType(SPELL_AURA_TRANSFORM);
         if (otherTransforms.empty())
         {
             m_target->SetDisplayId(m_target->GetNativeDisplayId());

@@ -18190,7 +18190,18 @@ void Player::LeaveBattleground(bool teleportToEntryPoint)
 {
     if (Battleground *bg = GetBattleground())
     {
-        bg->RemovePlayerAtLeave(GetGUID(), teleportToEntryPoint, true);
+        if(bg->isArena() && bg->isRated() && bg->GetStatus() != STATUS_WAIT_LEAVE) //if game has not end then make sure that personal rating is decreased
+		
+		{
+		//decrease private raiting here
+		Team Loser = (Team)bg->GetPlayerTeam(GetGUID());
+		Team Winner = Loser == ALLIANCE ? HORDE : ALLIANCE;
+		ArenaTeam* WinnerTeam = sObjectMgr->GetArenaTeamById(bg->GetArenaTeamIdForTeam(Winner));
+		ArenaTeam* LoserTeam = sObjectMgr->GetArenaTeamById(bg->GetArenaTeamIdForTeam(Loser));
+		LoserTeam->MemberLost(this,WinnerTeam->GetStats().rating);
+		}
+		
+		bg->RemovePlayerAtLeave(GetGUID(), teleportToEntryPoint, true);
 
         // call after remove to be sure that player resurrected for correct cast
         if (bg->isBattleground() && !isGameMaster() && sWorld->getConfig(CONFIG_BATTLEGROUND_CAST_DESERTER))
