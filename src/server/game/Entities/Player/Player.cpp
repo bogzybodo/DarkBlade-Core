@@ -20185,11 +20185,28 @@ void Player::AddGlobalCooldown(SpellEntry const *spellInfo, Spell const *spell)
         return;
 
     uint32 cdTime = spellInfo->StartRecoveryTime;
-
-    if (!(spellInfo->Attributes & (SPELL_ATTR_ABILITY|SPELL_ATTR_TRADESPELL)))
-        cdTime *= GetFloatValue(UNIT_MOD_CAST_SPEED);
-    else if (spell->IsRangedSpell() && !spell->IsAutoRepeat())
-        cdTime *= m_modAttackSpeedPct[RANGED_ATTACK];
+	
+	ApplySpellMod(spellInfo->Id, SPELLMOD_CASTING_TIME, cdTime);
+	
+	switch(spellInfo->Id)
+	{
+		case 44041: //Chastise rank 1-6
+		case 44043:
+		case 44044:
+		case 44045:
+		case 44046:
+		case 44047:
+			cdTime = 500;
+			break;
+		default:
+			if (!(spellInfo->Attributes & (SPELL_ATTR_ABILITY|SPELL_ATTR_TRADESPELL)))
+				cdTime *= GetFloatValue(UNIT_MOD_CAST_SPEED);
+			else if (spell->IsRangedSpell() && !spell->IsAutoRepeat())
+				cdTime *= m_modAttackSpeedPct[RANGED_ATTACK];
+			if(cdTime<1000)
+				cdTime = 1000;
+			break;
+	}
 
     if (cdTime > 1500)
         cdTime = 1500;
