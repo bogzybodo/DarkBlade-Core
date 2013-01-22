@@ -19954,7 +19954,11 @@ void Player::HandleFallDamage(MovementInfo& movementInfo)
 
             float height = movementInfo.GetPos()->GetPositionZ();
             UpdateGroundPositionZ(movementInfo.GetPos()->GetPositionX(), movementInfo.GetPos()->GetPositionY(), height);
-
+			
+			// No more fall dmg in arena
+			Battleground *bg = GetBattleground();
+			if (bg)
+				if (bg->isArena()) damage = 0;
             if (damage > 0)
             {
                 //Prevent fall damage from being more than the player maximum health
