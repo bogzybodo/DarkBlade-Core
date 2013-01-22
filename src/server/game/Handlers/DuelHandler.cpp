@@ -55,6 +55,10 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 
     player->SendDuelCountdown(3000);
     plTarget->SendDuelCountdown(3000);
+	
+	// Remove bandage debuff
+	player->RemoveAurasDueToSpell(11196);
+	plTarget->RemoveAurasDueToSpell(11196);
 }
 
 void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
